@@ -1,77 +1,41 @@
-package ru.yandex.practicum.telemetry.collector.mapper;
+package ru.yandex.practicum.telemetry.collector.service;
 
-import lombok.experimental.UtilityClass;
+import lombok.RequiredArgsConstructor;
 import org.apache.avro.specific.SpecificRecordBase;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.kafka.telemetry.event.*;
+import ru.yandex.practicum.telemetry.collector.constants.TelemetryTopics;
 import ru.yandex.practicum.telemetry.collector.events.hubs.*;
 import ru.yandex.practicum.telemetry.collector.events.hubs.enums.ActionType;
 import ru.yandex.practicum.telemetry.collector.events.hubs.enums.ConditionType;
 import ru.yandex.practicum.telemetry.collector.events.hubs.enums.DeviceType;
 import ru.yandex.practicum.telemetry.collector.events.hubs.enums.Operation;
-import ru.yandex.practicum.telemetry.collector.events.sensors.*;
 
 import java.util.List;
 
-@UtilityClass
-public class EventsAvroMapper {
+@Service
+@RequiredArgsConstructor
+public class HubEventsHandler implements EventsHandler<HubEvent> {
+    private final Producer<String, SpecificRecordBase> producer;
 
-    public SensorEventAvro toSensorEventAvro(SensorEvent sensorEvent) {
-        return SensorEventAvro.newBuilder()
-                .setHubId(sensorEvent.getHubId())
-                .setTimestamp(sensorEvent.getTimestamp())
-                .setId(sensorEvent.getId())
-                .setPayload(getPayload(sensorEvent))
-                .build();
+    @Override
+    public void save(HubEvent hubEvent) {
+        String topic = TelemetryTopics.TELEMETRY_HUBS_V1_TOPIC;
+        HubEventAvro message = toHubEventAvro(hubEvent);
+        String hubId = message.getHubId();
+        Long timestamp = message.getTimestamp().toEpochMilli();
+        ProducerRecord<String, SpecificRecordBase> record = new ProducerRecord<>(topic, null, timestamp, hubId, message);
+        producer.send(record);
     }
 
-    public HubEventAvro toHubEventAvro(HubEvent hubEvent) {
+    private HubEventAvro toHubEventAvro(HubEvent hubEvent) {
         return HubEventAvro.newBuilder()
                 .setHubId(hubEvent.getHubId())
                 .setTimestamp(hubEvent.getTimestamp())
                 .setPayload(getPayload(hubEvent))
                 .build();
-    }
-
-    private SpecificRecordBase getPayload(SensorEvent sensorEvent) {
-        return switch (sensorEvent.getType()) {
-            case LIGHT_SENSOR_EVENT -> {
-                LightSensorEvent lightSensorEvent = (LightSensorEvent) sensorEvent;
-                yield LightSensorAvro.newBuilder()
-                        .setLinkQuality(lightSensorEvent.getLinkQuality())
-                        .setLuminosity(lightSensorEvent.getLuminosity())
-                        .build();
-            }
-            case CLIMATE_SENSOR_EVENT -> {
-                ClimateSensorEvent climateSensorEvent = (ClimateSensorEvent) sensorEvent;
-                yield ClimateSensorAvro.newBuilder()
-                        .setCo2Level(climateSensorEvent.getCo2Level())
-                        .setHumidity(climateSensorEvent.getHumidity())
-                        .setTemperatureC(climateSensorEvent.getTemperatureC())
-                        .build();
-            }
-            case MOTION_SENSOR_EVENT -> {
-                MotionSensorEvent motionSensorEvent = (MotionSensorEvent) sensorEvent;
-                yield MotionSensorAvro.newBuilder()
-                        .setLinkQuality(motionSensorEvent.getLinkQuality())
-                        .setMotion(motionSensorEvent.getMotion())
-                        .setVoltage(motionSensorEvent.getVoltage())
-                        .build();
-            }
-
-            case TEMPERATURE_SENSOR_EVENT -> {
-                TemperatureSensorEvent temperatureSensorEvent = (TemperatureSensorEvent) sensorEvent;
-                yield TemperatureSensorAvro.newBuilder()
-                        .setTemperatureC(temperatureSensorEvent.getTemperatureC())
-                        .setTemperatureF(temperatureSensorEvent.getTemperatureF())
-                        .build();
-            }
-            case SWITCH_SENSOR_EVENT -> {
-                SwitchSensorEvent switchSensorEvent = (SwitchSensorEvent) sensorEvent;
-                yield SwitchSensorAvro.newBuilder()
-                        .setState(switchSensorEvent.getState())
-                        .build();
-            }
-        };
     }
 
     private SpecificRecordBase getPayload(HubEvent hubEvent) {
