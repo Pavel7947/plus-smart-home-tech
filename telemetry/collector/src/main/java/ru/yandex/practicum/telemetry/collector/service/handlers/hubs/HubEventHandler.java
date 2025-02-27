@@ -17,9 +17,15 @@ public abstract class HubEventHandler {
     public abstract void handle(HubEventProto event);
 
     protected HubEventAvro.Builder getAvroBuilderWithCommonFields(HubEventProto event) {
+        Instant timestamp;
+        if (event.hasTimestamp()) {
+            timestamp = Instant.ofEpochSecond(event.getTimestamp().getSeconds(), event.getTimestamp().getNanos());
+        } else {
+            timestamp = Instant.now();
+        }
         return HubEventAvro.newBuilder()
                 .setHubId(event.getHubId())
-                .setTimestamp(Instant.ofEpochSecond(event.getTimestamp().getSeconds(), event.getTimestamp().getNanos()));
+                .setTimestamp(timestamp);
     }
 
     protected void send(HubEventAvro message) {

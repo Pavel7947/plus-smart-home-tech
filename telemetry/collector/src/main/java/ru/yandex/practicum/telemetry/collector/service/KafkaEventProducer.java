@@ -22,7 +22,7 @@ public class KafkaEventProducer {
     public void send(SpecificRecordBase event, String topic, String hubId, Instant timestamp) {
         ProducerRecord<String, SpecificRecordBase> record =
                 new ProducerRecord<>(topic, null, timestamp.toEpochMilli(), hubId, event);
-        log.info("Сохраняю событие {}, связанное с хабом {}, в топик {}", event.getClass().getSimpleName(), hubId, topic);
+        log.info("Сохраняю событие {}, связанное с хабом {}, в топик {}", event, hubId, topic);
         producer.send(record);
     }
 }

@@ -17,9 +17,15 @@ public abstract class SensorEventHandler {
     public abstract void handle(SensorEventProto event);
 
     protected SensorEventAvro.Builder getAvroBuilderWithCommonFields(SensorEventProto event) {
+        Instant timestamp;
+        if (event.hasTimestamp()) {
+            timestamp = Instant.ofEpochSecond(event.getTimestamp().getSeconds(), event.getTimestamp().getNanos());
+        } else {
+            timestamp = Instant.now();
+        }
         return SensorEventAvro.newBuilder()
                 .setId(event.getId())
-                .setTimestamp(Instant.ofEpochSecond(event.getTimestamp().getSeconds(), event.getTimestamp().getNanos()))
+                .setTimestamp(timestamp)
                 .setHubId(event.getHubId());
     }
 

@@ -26,7 +26,8 @@ public class MotionSensorEventHandler extends SensorEventHandler {
                 .setPayload(MotionSensorAvro.newBuilder()
                         .setLinkQuality(payload.getLinkQuality())
                         .setMotion(payload.getMotion())
-                        .setVoltage(payload.getVoltage()))
+                        .setVoltage(payload.getVoltage())
+                        .build())
                 .build();
         send(message);
     }
