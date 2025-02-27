@@ -54,7 +54,7 @@ public class EventCollector extends CollectorControllerGrpc.CollectorControllerI
     }
 
     @Override
-    public void hubSensorEvent(HubEventProto request, StreamObserver<Empty> responseObserver) {
+    public void collectHubEvent(HubEventProto request, StreamObserver<Empty> responseObserver) {
         try {
             if (hubEventHandlers.containsKey(request.getPayloadCase())) {
                 hubEventHandlers.get(request.getPayloadCase()).handle(request);
