@@ -6,7 +6,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.telemetry.collector.config.KafkaProducerConfig;
+import ru.yandex.practicum.telemetry.collector.config.KafkaProducerProperties;
 
 import java.time.Instant;
 
@@ -15,7 +15,7 @@ import java.time.Instant;
 public class KafkaEventProducer {
     private final Producer<String, SpecificRecordBase> producer;
 
-    public KafkaEventProducer(KafkaProducerConfig config) {
+    public KafkaEventProducer(KafkaProducerProperties config) {
         this.producer = new KafkaProducer<>(config.getProducer());
     }
 

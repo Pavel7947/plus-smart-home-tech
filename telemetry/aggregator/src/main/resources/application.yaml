@@ -1,0 +1,12 @@
+aggregator:
+  kafka:
+    producer:
+      bootstrap.servers: "localhost:9092"
+      key.serializer: "org.apache.kafka.common.serialization.StringSerializer"
+      value.serializer: "ru.yandex.practicum.kafka.telemetry.serializer.AvroSerializer"
+    consumer:
+      bootstrap.servers: "localhost:9092"
+      key.deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
+      value.deserializer: "ru.yandex.practicum.kafka.telemetry.deserializer.SensorEventDeserializer"
+      group.id: "aggregator-consumer"
+      enable.auto.commit: false

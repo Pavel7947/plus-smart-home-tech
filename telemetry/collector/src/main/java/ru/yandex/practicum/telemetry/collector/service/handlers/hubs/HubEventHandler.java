@@ -2,8 +2,8 @@ package ru.yandex.practicum.telemetry.collector.service.handlers.hubs;
 
 import lombok.RequiredArgsConstructor;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
+import ru.yandex.practicum.kafka.telemetry.constants.TelemetryTopics;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
-import ru.yandex.practicum.telemetry.collector.constants.TelemetryTopics;
 import ru.yandex.practicum.telemetry.collector.service.KafkaEventProducer;
 
 import java.time.Instant;

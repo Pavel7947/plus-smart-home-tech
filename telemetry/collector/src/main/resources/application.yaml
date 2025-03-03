@@ -3,7 +3,7 @@ collector:
     producer:
       bootstrap.servers: "localhost:9092"
       key.serializer: "org.apache.kafka.common.serialization.StringSerializer"
-      value.serializer: "ru.yandex.practicum.telemetry.collector.config.AvroSerializer"
+      value.serializer: "ru.yandex.practicum.kafka.telemetry.serializer.AvroSerializer"
 
 org.apache.avro.specific.use_custom_coders: true
 server:
