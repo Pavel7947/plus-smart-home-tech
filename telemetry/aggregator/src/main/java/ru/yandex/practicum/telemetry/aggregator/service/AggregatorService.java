@@ -109,7 +109,7 @@ public class AggregatorService implements CommandLineRunner {
             }
             sensorsState.put(event.getId(), SensorStateAvro.newBuilder()
                     .setTimestamp(event.getTimestamp())
-                    .setData(event)
+                    .setData(event.getPayload())
                     .build()
             );
             snapshot.setTimestamp(event.getTimestamp());
@@ -118,7 +118,7 @@ public class AggregatorService implements CommandLineRunner {
             Map<String, SensorStateAvro> sensorsState = new HashMap<>();
             sensorsState.put(event.getId(), SensorStateAvro.newBuilder()
                     .setTimestamp(event.getTimestamp())
-                    .setData(event)
+                    .setData(event.getPayload())
                     .build());
             snapshot = SensorsSnapshotAvro.newBuilder()
                     .setHubId(record.key())
