@@ -2,8 +2,8 @@ package ru.yandex.practicum.telemetry.collector.service.handlers.sensor;
 
 import lombok.RequiredArgsConstructor;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
+import ru.yandex.practicum.kafka.telemetry.constants.TelemetryTopics;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
-import ru.yandex.practicum.telemetry.collector.constants.TelemetryTopics;
 import ru.yandex.practicum.telemetry.collector.service.KafkaEventProducer;
 
 import java.time.Instant;

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.collector.config;
+package ru.yandex.practicum.telemetry.aggregator.config;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,10 +7,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Properties;
 
-@Getter
 @Setter
+@Getter
 @ToString
-@ConfigurationProperties("collector.kafka")
-public class KafkaProducerConfig {
+@ConfigurationProperties("aggregator.kafka")
+public class KafkaClientProperties {
     Properties producer;
+    Properties consumer;
 }
