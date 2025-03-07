@@ -6,5 +6,4 @@ collector:
       value.serializer: "ru.yandex.practicum.kafka.telemetry.serializer.AvroSerializer"
 
 org.apache.avro.specific.use_custom_coders: true
-server:
-  port: 8080
+grpc.server.port: 59091

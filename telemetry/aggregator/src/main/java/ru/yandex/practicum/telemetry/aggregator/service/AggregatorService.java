@@ -42,11 +42,7 @@ public class AggregatorService implements CommandLineRunner {
                 ConsumerRecords<String, SensorEventAvro> records =
                         consumer.poll(Duration.ofSeconds(5));
                 for (ConsumerRecord<String, SensorEventAvro> record : records) {
-                    Optional<SensorsSnapshotAvro> snapshotOpt = updateState(record);
-                    if (snapshotOpt.isPresent()) {
-                        SensorsSnapshotAvro snapshot = snapshotOpt.get();
-                        send(snapshot);
-                    }
+                    updateState(record).ifPresent(this::send);
                     currentOffset.put(
                             new TopicPartition(record.topic(), record.partition()),
                             new OffsetAndMetadata(record.offset() + 1)
@@ -125,8 +121,8 @@ public class AggregatorService implements CommandLineRunner {
                     .setTimestamp(event.getTimestamp())
                     .setSensorsState(sensorsState)
                     .build();
+            snapshots.put(record.key(), snapshot);
         }
-        snapshots.put(record.key(), snapshot);
         return Optional.of(snapshot);
     }
 }
