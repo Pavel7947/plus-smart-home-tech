@@ -15,9 +15,11 @@ public class KafkaClientProperties {
     private Properties producer;
     private ConsumerProperties consumer;
 
-    @ToString @Setter @Getter
+    @ToString
+    @Setter
+    @Getter
     public static class ConsumerProperties {
-        Properties base;
-        Long pollDurationSeconds;
+        private Properties base;
+        private Long pollDurationSeconds;
     }
 }
