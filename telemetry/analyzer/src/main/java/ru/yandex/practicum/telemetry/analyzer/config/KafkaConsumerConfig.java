@@ -15,11 +15,11 @@ public class KafkaConsumerConfig {
 
     @Bean
     public Consumer<String, SensorsSnapshotAvro> getConsumerSensor() {
-        return new KafkaConsumer<>(properties.sensorSnapshot);
+        return new KafkaConsumer<>(properties.getSensorSnapshot());
     }
 
     @Bean
     public Consumer<String, HubEventAvro> getConsumerHub() {
-        return new KafkaConsumer<>(properties.hubEvent);
+        return new KafkaConsumer<>(properties.getHubEvent());
     }
 }

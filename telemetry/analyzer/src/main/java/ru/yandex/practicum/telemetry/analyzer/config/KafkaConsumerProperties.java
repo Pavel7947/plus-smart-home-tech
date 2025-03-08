@@ -12,6 +12,13 @@ import java.util.Properties;
 @ToString
 @ConfigurationProperties("analyzer.kafka.consumer")
 public class KafkaConsumerProperties {
-    Properties sensorSnapshot;
-    Properties hubEvent;
+    private Properties sensorSnapshot;
+    private Properties hubEvent;
+    private PollDuration pollDurationSeconds;
+
+    @ToString @Getter @Setter
+    public static class PollDuration {
+        private Long sensorSnapshot;
+        private Long hubEvent;
+    }
 }
