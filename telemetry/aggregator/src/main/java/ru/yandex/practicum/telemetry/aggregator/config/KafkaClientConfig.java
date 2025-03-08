@@ -22,6 +22,6 @@ public class KafkaClientConfig {
 
     @Bean
     public Consumer<String, SensorEventAvro> getConsumer() {
-        return new KafkaConsumer<>(properties.getConsumer());
+        return new KafkaConsumer<>(properties.getConsumer().getBase());
     }
 }

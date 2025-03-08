@@ -17,6 +17,7 @@ import ru.yandex.practicum.kafka.telemetry.constants.TelemetryTopics;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
+import ru.yandex.practicum.telemetry.aggregator.config.KafkaClientProperties;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class AggregatorService implements CommandLineRunner {
     private final Producer<String, SpecificRecordBase> producer;
     private final Map<String, SensorsSnapshotAvro> snapshots = new HashMap<>();
     private final Map<TopicPartition, OffsetAndMetadata> currentOffset = new HashMap<>();
+    private final KafkaClientProperties kafkaClientProperties;
 
     @Override
     public void run(String... args) {
@@ -40,7 +42,7 @@ public class AggregatorService implements CommandLineRunner {
             Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
             while (true) {
                 ConsumerRecords<String, SensorEventAvro> records =
-                        consumer.poll(Duration.ofSeconds(5));
+                        consumer.poll(Duration.ofSeconds(kafkaClientProperties.getConsumer().getPollDurationSeconds()));
                 for (ConsumerRecord<String, SensorEventAvro> record : records) {
                     updateState(record).ifPresent(this::send);
                     currentOffset.put(

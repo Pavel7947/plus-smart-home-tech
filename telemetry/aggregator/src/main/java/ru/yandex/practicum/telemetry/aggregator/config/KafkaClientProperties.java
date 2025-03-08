@@ -12,6 +12,12 @@ import java.util.Properties;
 @ToString
 @ConfigurationProperties("aggregator.kafka")
 public class KafkaClientProperties {
-    Properties producer;
-    Properties consumer;
+    private Properties producer;
+    private ConsumerProperties consumer;
+
+    @ToString @Setter @Getter
+    public static class ConsumerProperties {
+        Properties base;
+        Long pollDurationSeconds;
+    }
 }
