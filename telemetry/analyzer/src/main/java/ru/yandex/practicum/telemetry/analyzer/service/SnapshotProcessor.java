@@ -1,6 +1,5 @@
 package ru.yandex.practicum.telemetry.analyzer.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.apache.kafka.clients.consumer.Consumer;
