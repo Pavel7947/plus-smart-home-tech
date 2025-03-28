@@ -1,0 +1,17 @@
+services:
+  commerce-db:
+    image: postgres:16.1
+    container_name: commerce-db
+    ports:
+      - "6551:5432"
+    environment:
+      - POSTGRES_PASSWORD=commerce
+      - POSTGRES_USER=commerce
+      - POSTGRES_DB=commerce
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+    volumes:
+      - ./init-db:/docker-entrypoint-initdb.d
