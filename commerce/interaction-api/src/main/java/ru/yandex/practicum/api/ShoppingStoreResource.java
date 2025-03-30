@@ -22,7 +22,7 @@ public interface ShoppingStoreResource {
     ProductDtoStore updateProduct(@RequestBody ProductDtoStore updatedProduct);
 
     @PostMapping("api/v1/shopping-store/removeProductFromStore")
-    Boolean removeProduct(@RequestBody UUID productId);
+    ProductDtoStore removeProduct(@RequestBody UUID productId);
 
     @PostMapping("api/v1/shopping-store/quantityState")
     Boolean setQuantityState(@RequestParam UUID productId, @RequestParam QuantityState quantityState);

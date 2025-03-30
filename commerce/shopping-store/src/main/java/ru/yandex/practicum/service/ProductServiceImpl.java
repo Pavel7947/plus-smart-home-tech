@@ -58,9 +58,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Boolean removeProduct(UUID productId) {
-        productRepository.delete(getProductEntityById(productId));
-        return true;
+    public ProductDtoStore removeProduct(UUID productId) {
+        Product product = getProductEntityById(productId);
+        productRepository.delete(product);
+        return ProductDtoMapper.mapToProductDto(product);
     }
 
     @Override

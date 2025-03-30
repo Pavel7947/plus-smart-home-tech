@@ -41,7 +41,7 @@ public class ProductController implements ShoppingStoreResource {
     }
 
     @Override
-    public Boolean removeProduct(UUID productId) {
+    public ProductDtoStore removeProduct(UUID productId) {
         log.info("Поступил запрос на удаление товара по id: {}", productId);
         return productService.removeProduct(productId);
     }
