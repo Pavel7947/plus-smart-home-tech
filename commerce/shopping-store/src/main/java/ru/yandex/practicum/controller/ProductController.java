@@ -48,7 +48,7 @@ public class ProductController implements ShoppingStoreResource {
 
 
     @Override
-    public Boolean setQuantityState(UUID productId, QuantityState quantityState) {
+    public ProductDtoStore setQuantityState(UUID productId, QuantityState quantityState) {
         log.info("Поступил запрос на изменение статуса товара с id: {}", productId);
         return productService.setQuantityState(productId, quantityState);
     }

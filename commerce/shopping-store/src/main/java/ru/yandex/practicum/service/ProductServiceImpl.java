@@ -66,9 +66,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Boolean setQuantityState(UUID productId, QuantityState quantityState) {
-        getProductEntityById(productId).setQuantityState(quantityState);
-        return true;
+    public ProductDtoStore setQuantityState(UUID productId, QuantityState quantityState) {
+        Product product = getProductEntityById(productId);
+        product.setQuantityState(quantityState);
+        return ProductDtoMapper.mapToProductDto(product);
     }
 
     @Override
