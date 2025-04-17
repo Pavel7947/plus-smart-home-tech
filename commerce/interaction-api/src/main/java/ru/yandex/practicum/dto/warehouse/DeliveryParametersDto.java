@@ -5,16 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDtoResponse {
-    private UUID productId;
+public class DeliveryParametersDto {
+    private Double deliveryWeight;
+    private Double deliveryVolume;
     private Boolean fragile;
-    private DimensionDto dimension;
-    private Double weight;
-    private Long quantity;
 }

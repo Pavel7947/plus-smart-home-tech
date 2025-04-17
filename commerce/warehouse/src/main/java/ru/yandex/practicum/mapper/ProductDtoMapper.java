@@ -3,7 +3,7 @@ package ru.yandex.practicum.mapper;
 import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.dto.warehouse.DimensionDto;
 import ru.yandex.practicum.dto.warehouse.NewProductWarehouseRequest;
-import ru.yandex.practicum.dto.warehouse.ProductDtoResponse;
+import ru.yandex.practicum.dto.warehouse.ProductDtoWarehouse;
 import ru.yandex.practicum.model.Product;
 
 @UtilityClass
@@ -21,8 +21,8 @@ public class ProductDtoMapper {
                 .build();
     }
 
-    public ProductDtoResponse mapToProductDtoResponse(Product product) {
-        return ProductDtoResponse.builder()
+    public ProductDtoWarehouse mapToProductDtoResponse(Product product) {
+        return ProductDtoWarehouse.builder()
                 .productId(product.getId())
                 .weight(product.getWeight())
                 .dimension(DimensionDto.builder()
