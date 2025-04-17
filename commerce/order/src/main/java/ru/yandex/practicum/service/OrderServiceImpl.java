@@ -58,10 +58,14 @@ public class OrderServiceImpl implements OrderService {
                 .toAddress(findExistAddressOrGetNew(request.getDeliveryAddress()))
                 .fromAddress(findExistAddressOrGetNew(warehouseClient.getAddress()))
                 .build());
+
+        OrderDto orderDto = paymentClient.calculateProductCost(OrderDtoMapper.mapToOrderDto(order));
         DeliveryParametersDto deliveryParameters = bookProducts(order);
+
         order.setDeliveryVolume(deliveryParameters.getDeliveryVolume());
         order.setFragile(deliveryParameters.getFragile());
         order.setDeliveryWeight(deliveryParameters.getDeliveryWeight());
+        order.setProductPrice(orderDto.getProductPrice());
         return OrderDtoMapper.mapToOrderDto(order);
     }
 
@@ -150,9 +154,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto calculateTotalPrice(UUID orderId) {
         Order order = findById(orderId);
-        OrderDto orderDto = paymentClient.calculateProductCost(OrderDtoMapper.mapToOrderDto(order));
-        orderDto = paymentClient.calculateTotalCost(orderDto);
-        order.setProductPrice(orderDto.getProductPrice());
+        OrderDto orderDto = paymentClient.calculateTotalCost(OrderDtoMapper.mapToOrderDto(order));
         order.setTotalPrice(orderDto.getTotalPrice());
         return OrderDtoMapper.mapToOrderDto(order);
     }
