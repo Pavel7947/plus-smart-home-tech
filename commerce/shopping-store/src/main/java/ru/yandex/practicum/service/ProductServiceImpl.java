@@ -1,9 +1,11 @@
 package ru.yandex.practicum.service;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.yandex.practicum.dto.GetProductsFilter;
 import ru.yandex.practicum.dto.shoppingstore.ProductCategory;
 import ru.yandex.practicum.dto.shoppingstore.ProductDtoStore;
 import ru.yandex.practicum.dto.shoppingstore.ProductState;
@@ -11,10 +13,13 @@ import ru.yandex.practicum.dto.shoppingstore.QuantityState;
 import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.mapper.ProductDtoMapper;
 import ru.yandex.practicum.model.Product;
+import ru.yandex.practicum.model.QProduct;
 import ru.yandex.practicum.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -25,8 +30,20 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public List<ProductDtoStore> getProductsByType(ProductCategory category, Pageable pageable) {
-        return ProductDtoMapper.mapToProductDto(productRepository.findAllByProductCategory(category, pageable));
+    public List<ProductDtoStore> getProducts(GetProductsFilter filter) {
+        BooleanExpression condition = Expressions.TRUE;
+        Set<UUID> productsIds = filter.getProductsIds();
+        if (productsIds != null && !productsIds.isEmpty()) {
+            condition = condition.and(QProduct.product.id.in(productsIds));
+        }
+        if (filter.getCategory() != null) {
+            condition = condition.and(QProduct.product.productCategory.eq(filter.getCategory()));
+        }
+        List<Product> products = productRepository.findAll(condition, filter.getPageable()).getContent();
+        if (productsIds != null && !productsIds.isEmpty()) {
+            checkAllProductsFound(products, productsIds);
+        }
+        return ProductDtoMapper.mapToProductDto(products);
     }
 
     @Override
@@ -80,6 +97,15 @@ public class ProductServiceImpl implements ProductService {
     private Product getProductEntityById(UUID productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException("По переданному id: " + productId + " товар не найден"));
+    }
+
+    private void checkAllProductsFound(List<Product> products, Set<UUID> requiredProductIds) {
+        if (products.size() < requiredProductIds.size()) {
+            Set<UUID> findProductIds = products.stream().map(Product::getId).collect(Collectors.toSet());
+            String missingProductIds = requiredProductIds.stream().filter(uuid -> !findProductIds.contains(uuid))
+                    .map(UUID::toString).collect(Collectors.joining(", "));
+            throw new NotFoundException("Некоторые товары  не найдены id: " + missingProductIds);
+        }
     }
 
 }

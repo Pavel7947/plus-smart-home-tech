@@ -18,7 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Product {
     @Id
-    @Column(name = "product_id", length = 100)
+    @Column(name = "product_id")
     private UUID id;
     @Column(nullable = false)
     private Boolean fragile;

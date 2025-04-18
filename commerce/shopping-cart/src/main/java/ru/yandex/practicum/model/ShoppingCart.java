@@ -2,6 +2,7 @@ package ru.yandex.practicum.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +18,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ShoppingCart {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "shopping_cart_id", length = 100)
+    @UuidGenerator
+    @Column(name = "shopping_cart_id")
     private UUID id;
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "products", joinColumns = @JoinColumn(name = "shopping_cart_id"))

@@ -32,7 +32,7 @@ public class ShoppingCartController implements ShoppingCartResource {
 
     @Override
     public void deactivateShoppingCart(String username) {
-        log.info("Поступил запрос на деактивацию корзины от пользователя {}", username);
+        log.info("Поступил запрос на деактивацию корзины для пользователя {}", username);
         shoppingCartService.deactivateShoppingCart(username);
     }
 

@@ -24,10 +24,10 @@ public class CustomFeignErrorDecoder implements ErrorDecoder {
             return new RuntimeException();
         }
         if (response.status() == HttpStatus.NOT_FOUND.value()) {
-            log.debug("Получен статус 404 от сервиса склада с телом {}", body);
+            log.debug("Получен статус 404 с телом {}", body);
             return new NotFoundException(body.message());
         } else if (response.status() == HttpStatus.BAD_REQUEST.value()) {
-            log.debug("Получен статус 400 от сервиса склада с телом {}", body);
+            log.debug("Получен статус 400  с телом {}", body);
             return new LowQuantityException(body.message());
         }
         return defaultDecoder.decode(methodKey, response);
