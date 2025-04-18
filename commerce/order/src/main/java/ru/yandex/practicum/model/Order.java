@@ -2,6 +2,7 @@ package ru.yandex.practicum.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 import ru.yandex.practicum.dto.order.OrderState;
 
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @Table(name = "orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @UuidGenerator
     @Column(name = "order_id")
     private UUID id;
     @ElementCollection(fetch = FetchType.EAGER)
@@ -45,10 +46,8 @@ public class Order {
     private String userName;
     @ManyToOne
     @JoinColumn(name = "to_address", nullable = false)
-    @ToString.Exclude
     private Address toAddress;
     @ManyToOne
     @JoinColumn(name = "from_address", nullable = false)
-    @ToString.Exclude
     private Address fromAddress;
 }

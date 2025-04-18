@@ -2,6 +2,7 @@ package ru.yandex.practicum.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 import ru.yandex.practicum.dto.shoppingstore.ProductCategory;
 import ru.yandex.practicum.dto.shoppingstore.ProductState;
 import ru.yandex.practicum.dto.shoppingstore.QuantityState;
@@ -18,8 +19,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id", length = 100)
+    @UuidGenerator
+    @Column(name = "product_id")
     private UUID id;
     @Column(length = 100, nullable = false)
     private String productName;

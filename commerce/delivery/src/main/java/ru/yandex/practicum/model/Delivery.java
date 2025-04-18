@@ -2,6 +2,7 @@ package ru.yandex.practicum.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 import ru.yandex.practicum.dto.delivery.DeliveryState;
 
 import java.util.UUID;
@@ -15,16 +16,14 @@ import java.util.UUID;
 @Table(name = "deliveries")
 public class Delivery {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @UuidGenerator
     @Column(name = "delivery_id")
     private UUID id;
     @ManyToOne
     @JoinColumn(name = "from_address", nullable = false)
-    @ToString.Exclude
     private Address fromAddress;
     @ManyToOne
     @JoinColumn(name = "to_address", nullable = false)
-    @ToString.Exclude
     private Address toAddress;
     @Column(nullable = false)
     private UUID orderId;

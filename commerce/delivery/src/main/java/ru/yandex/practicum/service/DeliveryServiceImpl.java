@@ -31,7 +31,9 @@ public class DeliveryServiceImpl implements DeliveryService {
     private final AddressRepository addressRepository;
     private final OrderClient orderClient;
     private final WarehouseClient warehouseClient;
-    private static final Double BASE_DELIVERY_COST = (double) 5;
+    private static final Double BASE_DELIVERY_COST = 5.0;
+    private static final String FIRST_WAREHOUSE_CITY = "ADDRESS_1";
+    private static final String SECOND_WAREHOUSE_CITY = "ADDRESS_2";
 
     @Override
     public DeliveryDto cancelDelivery(UUID deliveryId) {
@@ -86,9 +88,9 @@ public class DeliveryServiceImpl implements DeliveryService {
     public OrderDto calculateDeliveryCost(OrderDto orderDto) {
         double totalCost = BASE_DELIVERY_COST;
         AddressDto fromAddress = orderDto.getFromAddress();
-        if (fromAddress.getCity().equals("ADDRESS_1")) {
+        if (fromAddress.getCity().equals(FIRST_WAREHOUSE_CITY)) {
             totalCost += totalCost;
-        } else {
+        } else if (fromAddress.getCity().equals(SECOND_WAREHOUSE_CITY)) {
             totalCost += totalCost * 2;
         }
         if (orderDto.getFragile()) {
