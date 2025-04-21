@@ -28,10 +28,10 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DuplicateException.class)
     public ErrorResponse handleDuplicateException(Exception e) {
-        log.debug("Получен статус 400 BAD_REQUEST {}", e.getMessage(), e);
+        log.debug("Получен статус 409 CONFLICT {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
 

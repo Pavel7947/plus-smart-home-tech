@@ -7,12 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.api.ShoppingStoreResource;
+import ru.yandex.practicum.dto.GetProductsFilter;
 import ru.yandex.practicum.dto.shoppingstore.ProductCategory;
 import ru.yandex.practicum.dto.shoppingstore.ProductDtoStore;
 import ru.yandex.practicum.dto.shoppingstore.QuantityState;
 import ru.yandex.practicum.service.ProductService;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -22,10 +24,15 @@ public class ProductController implements ShoppingStoreResource {
     private final ProductService productService;
 
     @Override
-    public List<ProductDtoStore> getProductsByType(ProductCategory category, Integer page, Integer size, List<String> sort) {
-        log.info("Поступил запрос на получение товаров по категории {}", category);
+    public List<ProductDtoStore> getProducts(ProductCategory category, Set<UUID> productIds,
+                                             Integer page, Integer size, List<String> sort) {
+        log.info("Поступил запрос на получение товаров");
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort.toArray(new String[0])));
-        return productService.getProductsByType(category, pageable);
+        return productService.getProducts(GetProductsFilter.builder()
+                .productsIds(productIds)
+                .category(category)
+                .pageable(pageable)
+                .build());
     }
 
     @Override
